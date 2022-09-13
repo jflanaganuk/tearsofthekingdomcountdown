@@ -46,9 +46,23 @@
         justify-content: center;
         height: 100vh;
       }
-    
+
       p {
         font-size: 1.5rem;
+      }
+
+      @media screen and (min-width: 1000px) {
+        body {
+          background-color: #3a6e87;
+          background-image: url("./images/optimised/desktop.webp");
+          background-size: contain;
+        }
+        main {
+          font-size: 5rem;
+        }
+        p {
+          font-size: 3rem;
+        }
       }
     </style>
   </head>
@@ -75,7 +89,7 @@
       }
 
       function getDifferenceBetweenNowAndRelease() {
-        const now = Date.now()
+        const now = Date.now();
         let difference = release - now;
         const days = Math.floor(difference / 1000 / 60 / 60 / 24);
         difference = difference - days * 1000 * 60 * 60 * 24;
