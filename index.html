@@ -20,7 +20,8 @@
     <style>
       @font-face {
         font-family: ZeldaWeb;
-        src: local('sans-serif'), url("fonts/HyliaSerifBeta-Regular.otf") format("opentype");
+        src: local("sans-serif"),
+          url("fonts/HyliaSerifBeta-Regular.otf") format("opentype");
         font-display: swap;
       }
 
@@ -38,20 +39,63 @@
         text-align: center;
         color: wheat;
         font-family: ZeldaWeb, "Roboto", sans-serif;
-        font-size: 5rem;
+        font-size: 3rem;
         text-shadow: 2px 2px #000;
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100vh;
       }
+    
+      p {
+        font-size: 1.5rem;
+      }
     </style>
   </head>
   <body>
     <main>
-      <div class="countdown">00:00:00</div>
+      <div>
+        <div class="countdown">00:00:00</div>
+        <p>Until <span id="release"></span> release</p>
+      </div>
     </main>
     <script>
+      const countdown = document.querySelector(".countdown");
+      const release = new Date("2023-05-12:00:00.000");
+      const releaseText = document.querySelector("#release");
+      const dtf = Intl.DateTimeFormat(window.navigator.language, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      releaseText.innerHTML = dtf.format(release);
+
+      function formatNumberToTwoDigits(number) {
+        return number.toString().padStart(2, "0");
+      }
+
+      function getDifferenceBetweenNowAndRelease() {
+        const now = Date.now()
+        let difference = release - now;
+        const days = Math.floor(difference / 1000 / 60 / 60 / 24);
+        difference = difference - days * 1000 * 60 * 60 * 24;
+        const hours = Math.floor(difference / 1000 / 60 / 60);
+        difference = difference - hours * 1000 * 60 * 60;
+        const minutes = Math.floor(difference / 1000 / 60);
+        difference = difference - minutes * 1000 * 60;
+        const seconds = Math.floor(difference / 1000);
+        countdown.innerHTML = `${days}:${formatNumberToTwoDigits(
+          hours
+        )}:${formatNumberToTwoDigits(minutes)}:${formatNumberToTwoDigits(
+          seconds
+        )}`;
+      }
+
+      setInterval(() => {
+        getDifferenceBetweenNowAndRelease();
+      }, 1000);
+      getDifferenceBetweenNowAndRelease();
+
       if (navigator.serviceWorker) {
         navigator.serviceWorker.register("/sw.js");
       }
